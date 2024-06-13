@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>Sistema de Armazenamento</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+      }
+
+      .main-container {
+        background-color: rgba(0, 0, 0, 0.879);
+        background-size: cover;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: start;
+        padding-top: 20px;
+      }
+
+      .content-wrapper {
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        border-radius: 10px;
+        width: 80%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      header {
+        background-color: #000000;
+        color: #fd7e00;
+        padding: 15px;
+        border-radius: 10px;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: 2rem;
+      }
+
+      .btn-primary {
+        background-color: #fd7e00;
+        border-color: #fd7e00;
+        color: #ffffff;
+      }
+
+      .btn-primary:hover {
+        background-color: #000000;
+        border-color: #ffffff;
+        color: #ffffff;
+      }
+      #btn-sair {
+        width: 100px;
+        margin-left: 8px;
+      }
+
+      .table {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .table-hover {
+        text-align: center;
+      }
+
+      .modal-header {
+        background-color: #000000;
+        color: #fd7e00;
+        margin-bottom: 4px;
+      }
+      .btn-outline-primary {
+        border-color: #000000;
+        color: #000000;
+      }
+      .btn-outline-primary:hover {
+        border-color: #000000;
+        color: #ffffff;
+        background-color: #000000;
+      }
+      .btn-outline-danger {
+        border-color: #fd7e00;
+        color: #fd7e00;
+      }
+      .btn-outline-danger:hover {
+        border-color: #fd7e00;
+        color: #ffffff;
+        background-color: #fd7e00;
+      }
+
+      .btn-close {
+        background-color: white;
+      }
+
+      .btn-outline-primary,
+      .btn-outline-danger {
+        border-width: 2px;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+
+  <body>
+    <div class="main-container">
+      <div class="content-wrapper">
+        <header class="row">
+          <div class="col-6">
+            <h1>Sistema de Armazenamento</h1>
+          </div>
+          <div class="col-6 text-end" style="margin-top: 10px">
+            <span>Olá, {{nome_usuario}}</span>
+
+            <a class="btn btn-primary" id="btn-sair" href="/sair">Sair</a>
+          </div>
+        </header>
+
+        <main class="row mt-5">
+          <div class="col-2">
+            <button
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#modal-novo-produto"
+            >
+              <i class="fas fa-plus"></i> Novo Produto
+            </button>
+          </div>
+        </main>
+
+        <section class="row mt-3">
+          <div class="col-12">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Produto</th>
+                  <th scope="col">Descrição</th>
+                  <th scope="col">Quantidade</th>
+                  <th scope="col">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="productTableBody">
+                {{#produto}}
+                <tr>
+                  <td>{{@index}}</td>
+                  <td>{{nome_produto}}</td>
+                  <td>{{descricao}}</td>
+                  <td>{{quantidade}}</td>
+                  <td>
+                    <div class="btn-group" role="group" aria-label="Ações">
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modal-editar-produto-{{@index}}"
+                      >
+                        <i class="fas fa-edit"></i> Editar
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-danger"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modal-excluir-produto-{{@index}}"
+                      >
+                        <i class="fas fa-trash-alt"></i> Excluir
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Modal Editar Produto -->
+                <div
+                  class="modal fade"
+                  id="modal-editar-produto-{{@index}}"
+                  tabindex="-1"
+                  aria-labelledby="modal-editar-produto-{{@index}}"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                        <form action="/editar_produto/{{id}}" method="post">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Editar Produto</h5>
+                            <button
+                              type="button"
+                              class="btn-close"
+                              data-bs-dismiss="modal"
+                              aria-label="Close"
+                            ></button>
+                          </div>
+                          <div class="mb-3">
+                            <label
+                              for="editar_nome_produto_{{@index}}"
+                              class="form-label"
+                              >Nome do Produto</label
+                            >
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="editar_nome_produto_{{@index}}"
+                              name="nome_produto"
+                              value="{{nome_produto}}"
+                            />
+                          </div>
+                          <div class="mb-3">
+                            <label
+                              for="editar_descricao_{{@index}}"
+                              class="form-label"
+                              >Descrição</label
+                            >
+                            <textarea
+                              class="form-control"
+                              id="editar_descricao_{{@index}}"
+                              name="descricao"
+                              required
+                            >
+                            {{descricao}}</textarea
+                            >
+                          </div>
+                          <div class="mb-3">
+                            <label
+                              for="editar_quantidade_{{@index}}"
+                              class="form-label"
+                              >Quantidade</label
+                            >
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="editar_quantidade_{{@index}}"
+                              name="quantidade"
+                              value="{{quantidade}}"
+                              required
+                            />
+                          </div>
+                          <button type="submit" class="btn btn-primary">
+                            Salvar Alterações
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Modal Excluir Produto -->
+                <div
+                  class="modal fade"
+                  id="modal-excluir-produto-{{@index}}"
+                  tabindex="-1"
+                  aria-labelledby="modal-excluir-produto-{{@index}}"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                        <form action="/excluir_produto/{{id}}" method="post">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Excluir Produto</h5>
+                            <button
+                              type="button"
+                              class="btn-close"
+                              data-bs-dismiss="modal"
+                              aria-label="Close"
+                            ></button>
+                          </div>
+                          <p>
+                            Você tem certeza que deseja excluir o produto
+                            "{{nome_produto}}"?
+                          </p>
+                          <button type="submit" class="btn btn-danger">
+                            Excluir
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {{/produto}}
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <footer class="pt-5 d-flex justify-content-between">
+          <span>© 2024</span>
+          <ul class="nav m-0">
+            <li class="nav-item">
+              <a class="nav-link text-secondary" aria-current="page" href="#"
+                >Política de privacidade</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-secondary" href="#">Termos de uso</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-secondary" href="#">Contato</a>
+            </li>
+          </ul>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Modal Novo Produto-->
+    <div
+      class="modal fade"
+      id="modal-novo-produto"
+      tabindex="-1"
+      aria-labelledby="modal-novo-produto"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <form action="/cadastrar_produto" method="post">
+              <div class="modal-header">
+                <h5 class="modal-title">Novo Produto</h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="mb-3">
+                <label for="nome_produto" class="form-label"
+                  >Nome do Produto</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nome_produto"
+                  name="nome_produto"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="descricao" class="form-label">Descrição</label>
+                <textarea
+                  class="form-control"
+                  id="descricao"
+                  name="descricao"
+                  required
+                ></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="quantidade" class="form-label">Quantidade</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="quantidade"
+                  name="quantidade"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn btn-primary">Cadastrar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
