@@ -119,7 +119,9 @@
           </div>
           <div class="col-6 text-end" style="margin-top: 10px">
             <span>Olá, {{nome_usuario}}</span>
-
+            <a class="btn btn-primary" href="/editar_usuario"
+              >Editar Informações</a
+            >
             <a class="btn btn-primary" id="btn-sair" href="/sair">Sair</a>
           </div>
         </header>
@@ -141,7 +143,6 @@
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th scope="col">#</th>
                   <th scope="col">Produto</th>
                   <th scope="col">Descrição</th>
                   <th scope="col">Quantidade</th>
@@ -151,7 +152,6 @@
               <tbody id="productTableBody">
                 {{#produto}}
                 <tr>
-                  <td>{{@index}}</td>
                   <td>{{nome_produto}}</td>
                   <td>{{descricao}}</td>
                   <td>{{quantidade}}</td>
@@ -161,7 +161,7 @@
                         type="button"
                         class="btn btn-sm btn-outline-primary"
                         data-bs-toggle="modal"
-                        data-bs-target="#modal-editar-produto-{{@index}}"
+                        data-bs-target="#modal-editar-produto-{{id}}"
                       >
                         <i class="fas fa-edit"></i> Editar
                       </button>
@@ -169,7 +169,7 @@
                         type="button"
                         class="btn btn-sm btn-outline-danger"
                         data-bs-toggle="modal"
-                        data-bs-target="#modal-excluir-produto-{{@index}}"
+                        data-bs-target="#modal-excluir-produto-{{id}}"
                       >
                         <i class="fas fa-trash-alt"></i> Excluir
                       </button>
@@ -180,9 +180,9 @@
                 <!-- Modal Editar Produto -->
                 <div
                   class="modal fade"
-                  id="modal-editar-produto-{{@index}}"
+                  id="modal-editar-produto-{{id}}"
                   tabindex="-1"
-                  aria-labelledby="modal-editar-produto-{{@index}}"
+                  aria-labelledby="modal-editar-produto-{{id}}"
                   aria-hidden="true"
                 >
                   <div class="modal-dialog">
@@ -200,43 +200,45 @@
                           </div>
                           <div class="mb-3">
                             <label
-                              for="editar_nome_produto_{{@index}}"
+                              for="editar_nome_produto_{{id}}"
                               class="form-label"
                               >Nome do Produto</label
                             >
                             <input
                               type="text"
                               class="form-control"
-                              id="editar_nome_produto_{{@index}}"
+                              id="editar_nome_produto_{{id}}"
                               name="nome_produto"
                               value="{{nome_produto}}"
                             />
                           </div>
                           <div class="mb-3">
                             <label
-                              for="editar_descricao_{{@index}}"
+                              for="editar_descricao_{{id}}"
                               class="form-label"
                               >Descrição</label
                             >
                             <textarea
                               class="form-control"
-                              id="editar_descricao_{{@index}}"
+                              style="align-items: flex-start;"
+                              id="editar_descricao_{{id}}"
                               name="descricao"
                               required
                             >
-                            {{descricao}}</textarea
+                            {{descricao}}
+                            </textarea
                             >
                           </div>
                           <div class="mb-3">
                             <label
-                              for="editar_quantidade_{{@index}}"
+                              for="editar_quantidade_{{id}}"
                               class="form-label"
                               >Quantidade</label
                             >
                             <input
                               type="number"
                               class="form-control"
-                              id="editar_quantidade_{{@index}}"
+                              id="editar_quantidade_{{id}}"
                               name="quantidade"
                               value="{{quantidade}}"
                               required
@@ -254,9 +256,9 @@
                 <!-- Modal Excluir Produto -->
                 <div
                   class="modal fade"
-                  id="modal-excluir-produto-{{@index}}"
+                  id="modal-excluir-produto-{{id}}"
                   tabindex="-1"
-                  aria-labelledby="modal-excluir-produto-{{@index}}"
+                  aria-labelledby="modal-excluir-produto-{{id}}"
                   aria-hidden="true"
                 >
                   <div class="modal-dialog">

@@ -5,11 +5,13 @@ function homeView(req, res) {
   Produto.findAll({
     where: {
       id_usuario: req.session.usuario.id,
-      nome_usuario: req.session.usuario.nome,
     },
   })
     .then((produto) => {
-      res.render("home.html", { produto, nome_usuario: req.session.usuario.nome });
+      res.render("home.html", {
+        produto,
+        nome_usuario: req.session.usuario.nome,
+      });
     })
     .catch((err_recuperar_produto) => {
       res.render("home.html", { err_recuperar_produto });

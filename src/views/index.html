@@ -14,8 +14,12 @@
     <section class="vh-100">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-sm-6 text-white" style="background-color: black;">
-            {{#sucesso}}
+          <div class="col-sm-6 text-white" style="background-color: black">
+            {{#erro_autenticacao}}
+            <div id="erro-alert" class="alert alert-danger">
+              Email ou senha errados, tente novamente!
+            </div>
+            {{/erro_autenticacao}} {{#sucesso}}
             <div id="success-alert" class="alert alert-success">
               Usuário cadastrado com sucesso!
             </div>
